@@ -38,9 +38,11 @@ export class DepositFormApp extends Component {
           props.config.custom_fields.vocabularies
         );
 
+    const apiHeaders = props.config.apiHeaders ? props.config.apiHeaders : null;
+
     const apiClient = props.apiClient
       ? props.apiClient
-      : new RDMDepositApiClient(props.config.createUrl, recordSerializer);
+      : new RDMDepositApiClient(apiHeaders, props.config.createUrl, recordSerializer);
 
     const fileApiClient = props.fileApiClient
       ? props.fileApiClient
