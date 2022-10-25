@@ -39,14 +39,19 @@ export class DepositFormApp extends Component {
         );
 
     const apiHeaders = props.config.apiHeaders ? props.config.apiHeaders : null;
+    const additionalApiConfig = { headers: apiHeaders };
 
     const apiClient = props.apiClient
       ? props.apiClient
-      : new RDMDepositApiClient(apiHeaders, props.config.createUrl, recordSerializer);
+      : new RDMDepositApiClient(
+          additionalApiConfig,
+          props.config.createUrl,
+          recordSerializer
+        );
 
     const fileApiClient = props.fileApiClient
       ? props.fileApiClient
-      : new RDMDepositFileApiClient();
+      : new RDMDepositFileApiClient(additionalApiConfig);
 
     const draftsService = props.draftsService
       ? props.draftsService

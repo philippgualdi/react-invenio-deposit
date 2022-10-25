@@ -6,6 +6,7 @@
 // under the terms of the MIT License; see LICENSE file for more details.
 
 import axios from "axios";
+import _get from "lodash/get";
 
 const BASE_HEADERS = {
   "json": { "Content-Type": "application/json" },
@@ -28,12 +29,13 @@ export class DepositApiClientResponse {
 
 export class DepositApiClient {
   /* eslint-disable no-unused-vars */
-  constructor(apiHeaders, createDraftURL, recordSerializer) {
+  constructor(additionalApiConfig, createDraftURL, recordSerializer) {
     if (this.constructor === DepositApiClient) {
       throw new Error("Abstract");
     }
-
-    this.apiHeaders = Object.assign({}, BASE_HEADERS, apiHeaders);
+    
+    const additionalHeaders = _get(additionalApiConfig, "headers");
+    this.apiHeaders = Object.assign({}, BASE_HEADERS, additionalHeaders);
 
     this.apiConfig = {
       withCredentials: true,
@@ -86,8 +88,8 @@ export class DepositApiClient {
  * API Client for deposits.
  */
 export class RDMDepositApiClient extends DepositApiClient {
-  constructor(apiHeaders, createDraftURL, recordSerializer) {
-    super(apiHeaders);
+  constructor(additionalApiConfig, createDraftURL, recordSerializer) {
+    super(additionalApiConfig);
     this.createDraftURL = createDraftURL;
     this.recordSerializer = recordSerializer;
   }
@@ -278,12 +280,12 @@ export class RDMDepositApiClient extends DepositApiClient {
  * @abstract
  */
 export class DepositFileApiClient {
-  constructor(apiHeaders) {
+  constructor(additionalApiConfig) {
     if (this.constructor === DepositFileApiClient) {
       throw new Error("Abstract");
     }
-
-    this.apiHeaders = Object.assign({}, BASE_HEADERS, apiHeaders);
+    const additionalHeaders = _get(additionalApiConfig, "headers", {});
+    this.apiHeaders = Object.assign({}, BASE_HEADERS, additionalHeaders);
 
     const apiConfig = {
       withCredentials: true,
